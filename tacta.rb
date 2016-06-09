@@ -41,6 +41,12 @@ def action_delete( contacts )
    puts
 end
 
+def action_error
+   puts
+   puts "Sorry, I don't recognize that command."
+   puts
+end
+
 def show(contact)
    puts "#{contact[:name]}"
    puts "phone: #{contact[:phone]}"
@@ -66,6 +72,12 @@ def ask(prompt)
    gets.chomp
 end
 
+def contact_exists?(contacts, response)
+  return false unless response =~ /[0-9]+/
+  i = response.to_i
+  !contacts[i-1].nil?
+end
+
 contacts = []
 
 contacts << { name: "Thomas Jefferson", phone: "+1 206 310 1369" , email: "tjeff@us.gov"       }
@@ -75,18 +87,26 @@ contacts << { name: "Genghis Khan"    , phone: "+976 2 194 2222" , email: "conta
 contacts << { name: "Malcom X"        , phone: "+1 310 155 8822" , email: "x@theroost.org"     }
 
 loop do
-   index( contacts )
+  index( contacts )
 
-   puts
-   response = ask "Who would you like to see (n for new, d for delete, q to quit)? "
+  puts
+  response = ask "Who would you like to see (n for new, d for delete, q to quit)? "
 
-   break if response == "q"
+  break if response == "q"
 
-   if response == "n"
-      action_new( contacts )
-   elsif response == "d"
-      action_delete( contacts )
-   else
+  if response == "n"
+    action_new( contacts )
+  elsif response == "d"
+    action_delete( contacts )
+  elsif response =~ /[0-9]+/
+    if contact_exists?(contacts, response)
       action_show( contacts, response.to_i )
-   end
+    else
+      puts
+      puts "That contact does not exist!"
+      puts
+    end
+  else
+    action_error
+  end
 end
