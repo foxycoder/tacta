@@ -6,24 +6,44 @@ def index(contacts)
   end
 end
 
+def action_new( contacts )
+   contact = create_new
+
+   contacts << contact
+
+   puts
+   puts "New contact created:"
+   puts
+
+   show( contact )
+   puts
+end
+
+def action_show( contacts, i )
+   contact = contacts[i-1]
+
+   puts
+   show( contact )
+   puts
+end
+
 def show(contact)
-  puts
-  puts "#{contact[:name]}"
-  puts "phone: #{contact[:phone]}"
-  puts "email: #{contact[:email]}"
+   puts "#{contact[:name]}"
+   puts "phone: #{contact[:phone]}"
+   puts "email: #{contact[:email]}"
 end
 
 def create_new
-  contact = {}
+   contact = {}
 
-  puts
-  puts "Enter contact info:"
+   puts
+   puts "Enter contact info:"
 
-  contact[:name ] = ask "Name? "
-  contact[:phone] = ask "Phone? "
-  contact[:email] = ask "Email? "
+   contact[:name ] = ask "Name? "
+   contact[:phone] = ask "Phone? "
+   contact[:email] = ask "Email? "
 
-  contact
+   contact
 end
 
 def ask(prompt)
@@ -45,27 +65,12 @@ loop do
 
    puts
    response = ask "Who would you like to see (n for new, q to quit)? "
+
    break if response == "q"
 
    if response == "n"
-
-      contact = create_new
-
-      contacts << contact
-
-      puts
-      puts "New contact created:"
-      puts
-
-      show( contact )
-      puts
+      action_new( contacts )
    else
-      i = response.to_i
-
-      contact = contacts[i-1]
-
-      puts
-      show( contact )
-      puts
+      action_show( contacts, response.to_i )
    end
 end
